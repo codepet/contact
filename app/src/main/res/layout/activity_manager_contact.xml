@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/id_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@mipmap/ic_tb_back"
+        app:title="@string/cancel_description"
+        app:titleTextColor="@android:color/white" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/id_toolbar"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/id_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/default_text_size" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/basic_config"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_dark" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/purple_light" />
+
+                    <TextView
+                        style="@style/edit_tag_style"
+                        android:text="@string/contact_name" />
+
+                    <EditText
+                        android:id="@+id/id_manager_contact_name"
+                        style="@style/edit_style"
+                        android:inputType="text"
+                        android:labelFor="@id/id_manager_contact_name" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/contact_way"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_dark" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:transitionName="card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/green_light" />
+
+                        <TextView
+                            style="@style/edit_tag_style"
+                            android:text="@string/contact_phone" />
+
+                        <EditText
+                            android:id="@+id/id_manager_contact_phone"
+                            style="@style/edit_style"
+                            android:inputType="phone"
+                            android:labelFor="@id/id_manager_contact_phone" />
+
+                    </LinearLayout>
+
+                    <include layout="@layout/divider_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/red_light" />
+
+                        <TextView
+                            style="@style/edit_tag_style"
+                            android:text="@string/contact_home" />
+
+                        <EditText
+                            android:id="@+id/id_manager_contact_home"
+                            style="@style/edit_style"
+                            android:inputType="phone"
+                            android:labelFor="@id/id_manager_contact_home" />
+
+                    </LinearLayout>
+
+                    <include layout="@layout/divider_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/yellow_light" />
+
+                        <TextView
+                            style="@style/edit_tag_style"
+                            android:text="@string/contact_work" />
+
+                        <EditText
+                            android:id="@+id/id_manager_contact_work"
+                            style="@style/edit_style"
+                            android:inputType="phone"
+                            android:labelFor="@id/id_manager_contact_work" />
+
+                    </LinearLayout>
+
+                    <include layout="@layout/divider_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/orange_light" />
+
+                        <TextView
+                            style="@style/edit_tag_style"
+                            android:text="@string/contact_fax" />
+
+                        <EditText
+                            android:id="@+id/id_manager_contact_fax"
+                            style="@style/edit_style"
+                            android:inputType="textEmailAddress"
+                            android:labelFor="@id/id_manager_contact_fax" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/id_manager_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:src="@mipmap/ic_fab_done"
+        android:transitionName="fab"
+        app:borderWidth="0dp"
+        app:elevation="0dp" />
+
+</RelativeLayout>

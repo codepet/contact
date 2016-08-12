@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/id_contact_sms"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:contentDescription="@string/sms_description"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_sms" />
+
+    <TextView
+        android:id="@+id/id_contact_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/id_contact_sms"
+        android:paddingTop="10dp"
+        android:textColor="@color/black_light"
+        android:textSize="@dimen/default_text_size" />
+
+    <TextView
+        android:id="@+id/id_contact_phone_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_contact_phone"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/id_contact_sms"
+        android:textColor="@color/gray_dark"
+        android:textSize="12sp" />
+
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:contentDescription="@string/sms_description"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_right_arrow" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/id_contact_phone_type"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_light" />
+</RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#03AEDA</color>
+    <color name="colorPrimaryDark">#03AEDA</color>
+    <color name="colorAccent">#03AEDA</color>
+
+    <color name="gray_light">#ecf0f1</color>
+    <color name="gray_dark">#a9b7b7</color>
+    <color name="black_light">#33475f</color>
+
+    <color name="green_light">#00bb9c</color>
+    <color name="purple_light">#9d55b8</color>
+    <color name="yellow_light">#f4c600</color>
+    <color name="orange_light">#ea8010</color>
+    <color name="red_light">#eb4f38</color>
+</resources>

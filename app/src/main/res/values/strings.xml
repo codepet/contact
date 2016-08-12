@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">易通讯</string>
+    <string name="image_index">联系人索引</string>
+    <string name="other">其它</string>
+    <string name="qr_code">二维码名片</string>
+    <string name="sms_description">发送信息</string>
+    <string name="edit_description">编辑联系人</string>
+    <string name="delete_description">删除联系人</string>
+    <string name="add_description">添加联系人</string>
+    <string name="cancel_description">取消</string>
+    <string name="done_description">完成</string>
+    <string name="user_card">我的名片</string>
+    <string name="scan_description">扫一扫</string>
+    <string name="scan_detail">扫一扫“二维码名片”\n即可添加我的联系方式到联系人</string>
+
+
+    <string name="basic_config">基本信息</string>
+    <string name="contact_way">联系方式</string>
+    <string name="contact_name">姓名</string>
+    <string name="contact_phone">手机</string>
+    <string name="contact_home">家庭</string>
+    <string name="contact_work">单位</string>
+    <string name="contact_fax">邮件</string>
+
+</resources>
