@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/divider_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/orange_light" />
+
+        <Spinner
+            android:id="@+id/id_add_contact_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:entries="@array/emailType"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp" />
+
+        <EditText
+            android:id="@+id/id_add_contact_data"
+            style="@style/edit_style"
+            android:inputType="textEmailAddress"
+            android:labelFor="@id/id_add_contact_data" />
+
+    </LinearLayout>
+
+</LinearLayout>

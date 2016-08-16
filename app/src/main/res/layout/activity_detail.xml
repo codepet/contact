@@ -44,8 +44,50 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/phone"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/gray_dark" />
+
             <LinearLayout
-                android:id="@+id/id_phones_layout"
+                android:id="@+id/id_contact_phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/email"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/gray_dark" />
+
+            <LinearLayout
+                android:id="@+id/id_contact_email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
@@ -70,13 +112,13 @@
 
             <Button
                 android:id="@+id/id_contact_code"
-                style="?borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_qrcode"
+                android:background="@drawable/item_ripple_shape"
+                android:drawableEnd="@mipmap/ic_right_arrow"
                 android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/ic_right_arrow"
-                android:gravity="left|center_vertical"
+                android:drawableStart="@mipmap/ic_qr_code"
+                android:gravity="start|center_vertical"
                 android:padding="20dp"
                 android:text="@string/qr_code"
                 android:textColor="@color/black_light" />
@@ -84,13 +126,13 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/id_contact_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@mipmap/ic_fab_edit"
+        app:backgroundTint="@color/blue_light"
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:layout_anchor="@id/app_bar"
@@ -104,6 +146,7 @@
         android:layout_margin="16dp"
         android:src="@mipmap/ic_fab_delete"
         android:transitionName="fab"
+        app:backgroundTint="@color/red_light"
         app:borderWidth="0dp"
         app:elevation="0dp" />
 

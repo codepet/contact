@@ -8,38 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/item_ripple_shape"
+        android:paddingStart="20dp"
         android:clickable="true">
 
-        <ImageButton
-            android:id="@+id/id_contact_sms"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/sms_description"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_sms" />
-
         <TextView
-            android:id="@+id/id_contact_phone"
-            android:layout_width="match_parent"
+            android:id="@+id/id_contact_email"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/id_contact_sms"
             android:paddingTop="10dp"
             android:textColor="@color/black_light"
             android:textSize="@dimen/default_text_size" />
 
         <TextView
-            android:id="@+id/id_contact_phone_type"
-            android:layout_width="match_parent"
+            android:id="@+id/id_contact_email_type"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/id_contact_phone"
+            android:layout_below="@id/id_contact_email"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@id/id_contact_sms"
             android:textColor="@color/gray_dark"
             android:textSize="12sp" />
 

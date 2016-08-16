@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbar"
@@ -15,6 +16,13 @@
         app:title="@string/app_name"
         app:titleTextColor="@android:color/white" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/id_contact_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/id_toolbar"
+        android:overScrollMode="never" />
+
     <com.gc.contact.widget.AlphabetScrollBar
         android:id="@+id/id_alphabet_bar"
         android:layout_width="24dp"
@@ -23,15 +31,6 @@
         android:layout_below="@id/id_toolbar"
         android:paddingBottom="10dp"
         android:paddingTop="10dp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_contact_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/id_toolbar"
-        android:layout_toStartOf="@id/id_alphabet_bar"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
 
     <TextView
         android:id="@+id/id_letter_notice"
@@ -49,9 +48,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
         android:src="@mipmap/ic_fab_add"
         android:transitionName="fab"
         app:borderWidth="0dp"

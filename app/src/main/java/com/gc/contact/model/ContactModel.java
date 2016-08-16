@@ -16,7 +16,7 @@ import android.text.TextUtils;
 
 import com.gc.contact.entity.Contact;
 import com.gc.contact.entity.Contact.Builder;
-import com.gc.contact.entity.PhoneNumber;
+import com.gc.contact.entity.ContactInfo;
 import com.gc.contact.util.CharacterParser;
 
 import java.util.ArrayList;
@@ -24,10 +24,6 @@ import java.util.List;
 
 public class ContactModel {
 
-    private static final String[] PHONE_PROJECTION = new String[]{
-            Phone.CONTACT_ID, Phone.DISPLAY_NAME};
-    private static final int CONTACT_ID_INDEX = 0;
-    private static final int DISPLAY_NAME_INDEX = 1;
     private static CharacterParser characterParser;
 
     static {
@@ -47,11 +43,16 @@ public class ContactModel {
     public static List<Contact> getPhoneContact(Context context) {
         List<Contact> contacts = new ArrayList<>();
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(Phone.CONTENT_URI, PHONE_PROJECTION, null, null, null);
+        Cursor cursor = resolver.query(
+                Phone.CONTENT_URI,
+                new String[]{Phone.CONTACT_ID, Phone.DISPLAY_NAME},
+                null,
+                null,
+                null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                long contactID = cursor.getLong(CONTACT_ID_INDEX);
-                String displayName = cursor.getString(DISPLAY_NAME_INDEX);
+                long contactID = cursor.getLong(cursor.getColumnIndex(Phone.CONTACT_ID));
+                String displayName = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
                 String pinyin = characterParser.getSelling(displayName);
                 String sortString = pinyin.substring(0, 1).toUpperCase();
                 Builder builder = new Builder()
@@ -72,35 +73,71 @@ public class ContactModel {
     }
 
     /**
-     * 根据id获取联系人联系方式
+     * 根据id获取联系人电话
      *
      * @param context   上下文
      * @param contactID 联系人id
      * @return 电话列表
      */
-    public static List<PhoneNumber> getPhones(Context context, long contactID) {
-        List<PhoneNumber> phones = new ArrayList<>();
+    public static List<ContactInfo> getPhones(Context context, long contactID) {
+        List<ContactInfo> phones = new ArrayList<>();
         ContentResolver resolver = context.getContentResolver();
-        Cursor phoneCursor = resolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        // 查询电话号码
+        Cursor cursor = resolver.query(
+                Phone.CONTENT_URI,
                 null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactID,
+                Phone.CONTACT_ID + " = " + contactID,
                 null,
                 null);
-        if (phoneCursor != null) {
-            while (phoneCursor.moveToNext()) {
-                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
-                String phoneType = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.TYPE));
-                PhoneNumber number = new PhoneNumber.Builder()
-                        .phoneNumber(phoneNumber)
-                        .phoneType(phoneType)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String phoneNumber = cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
+                int description = cursor.getInt(cursor.getColumnIndex(Phone.TYPE));
+                ContactInfo number = new ContactInfo.Builder()
+                        .data(phoneNumber)
+                        .type(Phone.TYPE)
+                        .description(description)
                         .build();
                 phones.add(number);
             }
-            phoneCursor.close();
+            cursor.close();
         }
         return phones;
     }
+
+    /**
+     * 根据id获取联系人邮件
+     *
+     * @param context   上下文
+     * @param contactID 联系人id
+     * @return 电话列表
+     */
+    public static List<ContactInfo> getEmails(Context context, long contactID) {
+        List<ContactInfo> emails = new ArrayList<>();
+        ContentResolver resolver = context.getContentResolver();
+        // 查询邮箱
+        Cursor cursor = resolver.query(
+                Email.CONTENT_URI,
+                new String[]{Email.DATA, Email.TYPE},
+                Phone.CONTACT_ID + " = " + contactID,
+                null,
+                null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String email = cursor.getString(cursor.getColumnIndex(Email.DATA));
+                int description = cursor.getInt(cursor.getColumnIndex(Email.TYPE));
+                ContactInfo number = new ContactInfo.Builder()
+                        .data(email)
+                        .type(Email.TYPE)
+                        .description(description)
+                        .build();
+                emails.add(number);
+            }
+            cursor.close();
+        }
+        return emails;
+    }
+
 
     /**
      * 添加联系人
@@ -111,61 +148,45 @@ public class ContactModel {
      */
     public static long insert(Context context, Contact contact) {
         String name = contact.getDisplayName();
-        List<PhoneNumber> phoneNumbers = contact.getPhoneNumber();
-        String home = phoneNumbers.get(0).getPhoneNumber();
-        String phone = phoneNumbers.get(1).getPhoneNumber();
-        String work = phoneNumbers.get(2).getPhoneNumber();
-        String email = phoneNumbers.get(3).getPhoneNumber();
+        List<ContactInfo> phones = contact.getPhones();
+        List<ContactInfo> emails = contact.getEmails();
         long rawContactId;
         try {
             ContentValues values = new ContentValues();
             ContentResolver resolver = context.getContentResolver();
             Uri rawContactUri = resolver.insert(ContactsContract.RawContacts.CONTENT_URI, values);
             rawContactId = ContentUris.parseId(rawContactUri);
-
             // 插入名字
             if (!TextUtils.isEmpty(name)) {
                 values.clear();
-                values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-                values.put(ContactsContract.Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
-                values.put(StructuredName.GIVEN_NAME, name);
-                resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-            }
-
-            if (!TextUtils.isEmpty(home)) {
-                values.clear();
-                values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-                values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-                values.put(Phone.NUMBER, home);
-                values.put(Phone.TYPE, Phone.TYPE_HOME);
-                resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-            }
-
-            if (!TextUtils.isEmpty(phone)) {
-                values.clear();
-                values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-                values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-                values.put(Phone.NUMBER, phone);
-                values.put(Phone.TYPE, Phone.TYPE_MOBILE);
-                resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-            }
-
-            if (!TextUtils.isEmpty(work)) {
-                values.clear();
-                values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-                values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-                values.put(Phone.NUMBER, work);
-                values.put(Phone.TYPE, Phone.TYPE_WORK);
-                resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-            }
-
-            if (!TextUtils.isEmpty(email)) {
-                values.clear();
                 values.put(Data.RAW_CONTACT_ID, rawContactId);
-                values.put(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
-                values.put(Email.DATA, email);
-                values.put(Email.TYPE, Email.TYPE_WORK);
-                resolver.insert(ContactsContract.Data.CONTENT_URI, values);
+                values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
+                values.put(StructuredName.GIVEN_NAME, name);
+                resolver.insert(Data.CONTENT_URI, values);
+            }
+            // 插入电话
+            for (ContactInfo info : phones) {
+                String data = info.getData();
+                if (!TextUtils.isEmpty(data)) {
+                    values.clear();
+                    values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+                    values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+                    values.put(Phone.NUMBER, data);
+                    values.put(Phone.TYPE, info.getDescription());
+                    resolver.insert(Data.CONTENT_URI, values);
+                }
+            }
+            // 插入电子邮件
+            for (ContactInfo info : emails) {
+                String data = info.getData();
+                if (!TextUtils.isEmpty(data)) {
+                    values.clear();
+                    values.put(Data.RAW_CONTACT_ID, rawContactId);
+                    values.put(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
+                    values.put(Email.DATA, data);
+                    values.put(Email.TYPE, info.getDescription());
+                    resolver.insert(Data.CONTENT_URI, values);
+                }
             }
         } catch (Exception e) {
             return 0;

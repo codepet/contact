@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/id_top_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="240dp"
         android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/id_bar_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_tb_back"
             android:drawablePadding="10dp"
+            android:drawableStart="@mipmap/ic_tb_back"
             android:padding="10dp"
             android:text="@string/user_card"
             android:textColor="@android:color/white"
@@ -39,136 +38,74 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@mipmap/ic_qrcode"
             android:drawablePadding="10dp"
-            android:gravity="left|center_vertical"
+            android:drawableStart="@mipmap/ic_qr_code"
+            android:gravity="start|center_vertical"
             android:padding="20dp"
             android:text="@string/qr_code"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_below="@id/id_top_layout"
+        android:orientation="vertical"
+        android:overScrollMode="never">
 
-        <android.support.design.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/tag_phone" />
 
             <android.support.v7.widget.CardView
-                android:id="@+id/id_contact_card"
+                android:id="@+id/id_my_phone_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:transitionName="card">
+                android:transitionName="phone_card">
 
                 <LinearLayout
+                    android:id="@+id/id_my_phone_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/green_light" />
-
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_phone" />
-
-                        <TextView
-                            android:id="@+id/id_user_phone"
-                            style="@style/edit_tag_style" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/divider_light" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/red_light" />
-
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_home" />
-
-                        <TextView
-                            android:id="@+id/id_user_home"
-                            style="@style/edit_tag_style" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/divider_light" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/yellow_light" />
-
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_work" />
-
-                        <TextView
-                            android:id="@+id/id_user_work"
-                            style="@style/edit_tag_style" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/divider_light" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/orange_light" />
-
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_fax" />
-
-                        <TextView
-                            android:id="@+id/id_user_fax"
-                            style="@style/edit_tag_style" />
-
-                    </LinearLayout>
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/id_edit_config"
-                android:layout_width="wrap_content"
+            <include layout="@layout/tag_email" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/id_my_email_card"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_margin="16dp"
-                android:src="@mipmap/ic_fab_edit"
-                app:borderWidth="0dp" />
+                android:layout_margin="20dp"
+                android:transitionName="email_card">
 
-        </android.support.design.widget.CoordinatorLayout>
+                <LinearLayout
+                    android:id="@+id/id_my_email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-    </ScrollView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/id_edit_config"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/id_top_layout"
+        android:layout_margin="10dp"
+        android:src="@mipmap/ic_fab_edit"
+        app:backgroundTint="@color/blue_light"
+        app:borderWidth="0dp"
+        app:elevation="0dp" />
+
+</RelativeLayout>

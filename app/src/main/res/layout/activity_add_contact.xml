@@ -18,21 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/id_toolbar"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/id_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="20dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/default_text_size" />
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,39 +67,24 @@
                         android:text="@string/contact_name" />
 
                     <EditText
-                        android:id="@+id/id_manager_contact_name"
+                        android:id="@+id/id_add_contact_name"
                         style="@style/edit_style"
                         android:inputType="text"
-                        android:labelFor="@id/id_manager_contact_name" />
+                        android:labelFor="@id/id_add_contact_name" />
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="@string/contact_way"
-                android:textColor="@color/gray_dark"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/gray_dark" />
+            <include layout="@layout/tag_phone" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:transitionName="card">
+                android:layout_margin="20dp">
 
                 <LinearLayout
+                    android:id="@+id/id_contact_phone_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -118,69 +97,47 @@
                         <View
                             android:layout_width="5dp"
                             android:layout_height="match_parent"
-                            android:background="@color/green_light" />
-
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_phone" />
-
-                        <EditText
-                            android:id="@+id/id_manager_contact_phone"
-                            style="@style/edit_style"
-                            android:inputType="phone"
-                            android:labelFor="@id/id_manager_contact_phone" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/divider_light" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
                             android:background="@color/red_light" />
 
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_home" />
+                        <Spinner
+                            android:id="@+id/id_phone_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:entries="@array/phoneType"
+                            android:paddingEnd="10dp"
+                            android:paddingStart="10dp" />
 
                         <EditText
-                            android:id="@+id/id_manager_contact_home"
+                            android:id="@+id/id_add_contact_phone"
                             style="@style/edit_style"
                             android:inputType="phone"
-                            android:labelFor="@id/id_manager_contact_home" />
-
+                            android:labelFor="@id/id_add_contact_phone" />
                     </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-                    <include layout="@layout/divider_light" />
+            <Button
+                android:id="@+id/id_add_phone_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/item_ripple_corner_shape"
+                android:text="@string/add_more" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+            <include layout="@layout/tag_email" />
 
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/yellow_light" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
 
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_work" />
-
-                        <EditText
-                            android:id="@+id/id_manager_contact_work"
-                            style="@style/edit_style"
-                            android:inputType="phone"
-                            android:labelFor="@id/id_manager_contact_work" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/divider_light" />
+                <LinearLayout
+                    android:id="@+id/id_contact_email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -192,20 +149,33 @@
                             android:layout_height="match_parent"
                             android:background="@color/orange_light" />
 
-                        <TextView
-                            style="@style/edit_tag_style"
-                            android:text="@string/contact_fax" />
+                        <Spinner
+                            android:id="@+id/id_email_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:entries="@array/emailType"
+                            android:paddingEnd="10dp"
+                            android:paddingStart="10dp" />
 
                         <EditText
-                            android:id="@+id/id_manager_contact_fax"
+                            android:id="@+id/id_add_contact_email"
                             style="@style/edit_style"
                             android:inputType="textEmailAddress"
-                            android:labelFor="@id/id_manager_contact_fax" />
-
+                            android:labelFor="@id/id_add_contact_email" />
                     </LinearLayout>
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/id_add_email_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/item_ripple_corner_shape"
+                android:text="@string/add_more" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -218,6 +188,7 @@
         android:layout_margin="16dp"
         android:src="@mipmap/ic_fab_done"
         android:transitionName="fab"
+        app:backgroundTint="@color/green_light"
         app:borderWidth="0dp"
         app:elevation="0dp" />
 
