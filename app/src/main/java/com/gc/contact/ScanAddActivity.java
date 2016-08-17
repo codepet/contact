@@ -21,9 +21,9 @@ import java.util.List;
 
 public class ScanAddActivity extends BaseActivity {
 
-    private TextView mNameText;
-    private LinearLayout mPhoneLayout;
-    private LinearLayout mEmailLayout;
+    private TextView mNameText;  // 姓名布局
+    private LinearLayout mPhoneLayout;  // 电话布局
+    private LinearLayout mEmailLayout;  // 邮件布局
     private static ColorGenerator colorGenerator;  // 颜色生成器
     private Contact contact;
 

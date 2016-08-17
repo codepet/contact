@@ -23,14 +23,14 @@ import java.util.List;
 
 public class EditActivity extends BaseActivity {
 
-    private EditText mNameText;
-    private LinearLayout mPhonesLayout;
-    private LinearLayout mEmailLayout;
-    private List<Spinner> mPhoneTypeList;
-    private List<EditText> mPhoneDataList;
-    private List<Spinner> mEmailTypeList;
-    private List<EditText> mEmailDataList;
-    private LayoutInflater inflater;
+    private EditText mNameText;  // 姓名编辑框
+    private LinearLayout mPhonesLayout;  // 电话布局
+    private LinearLayout mEmailLayout;  // 邮件布局
+    private List<Spinner> mPhoneTypeList;  // 电话类型列表
+    private List<EditText> mPhoneDataList;  // 电话列表
+    private List<Spinner> mEmailTypeList;  // 邮件类型列表
+    private List<EditText> mEmailDataList;  // 邮件列表
+    private LayoutInflater inflater;  // 布局填充器
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class EditActivity extends BaseActivity {
         mPhonesLayout = (LinearLayout) findViewById(R.id.id_edit_phone_layout);
         mEmailLayout = (LinearLayout) findViewById(R.id.id_edit_email_layout);
         inflater = LayoutInflater.from(this);
+        // 完成按钮
         FloatingActionButton mDoneButton = (FloatingActionButton) findViewById(R.id.id_manager_done);
         if (mDoneButton != null) {
             mDoneButton.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +59,7 @@ public class EditActivity extends BaseActivity {
                 }
             });
         }
-        //
+        //  添加更多电话按钮
         Button mAddMorePhoneButton = (Button) findViewById(R.id.id_edit_phone_type);
         if (mAddMorePhoneButton != null) {
             mAddMorePhoneButton.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +69,7 @@ public class EditActivity extends BaseActivity {
                 }
             });
         }
-        //
+        // 添加更多邮件列表
         Button mAddMoreEmailButton = (Button) findViewById(R.id.id_edit_email_type);
         if (mAddMoreEmailButton != null) {
             mAddMoreEmailButton.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +81,9 @@ public class EditActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 添加电话布局
+     */
     private void addPhoneView() {
         View view = inflater.inflate(R.layout.item_edit_phone, new LinearLayout(this), false);
         Spinner spinner = (Spinner) view.findViewById(R.id.id_add_contact_type);
@@ -89,6 +93,10 @@ public class EditActivity extends BaseActivity {
         mPhonesLayout.addView(view);
     }
 
+    /**
+     * 添加电话布局，并填充数据
+     * @param info 联系方式信息
+     */
     private void addPhoneView(ContactInfo info) {
         View view = inflater.inflate(R.layout.item_edit_phone, new LinearLayout(this), false);
         Spinner spinner = (Spinner) view.findViewById(R.id.id_add_contact_type);
@@ -100,6 +108,9 @@ public class EditActivity extends BaseActivity {
         mPhonesLayout.addView(view);
     }
 
+    /**
+     * 添加邮件布局
+     */
     private void addEmailView() {
         View view = inflater.inflate(R.layout.item_edit_email, new LinearLayout(this), false);
         Spinner spinner = (Spinner) view.findViewById(R.id.id_add_contact_type);
@@ -109,6 +120,10 @@ public class EditActivity extends BaseActivity {
         mEmailLayout.addView(view);
     }
 
+    /**
+     * 添加邮件布局，并填充信息
+     * @param info 联系方式信息
+     */
     private void addEmailView(ContactInfo info) {
         View view = inflater.inflate(R.layout.item_edit_email, new LinearLayout(this), false);
         Spinner spinner = (Spinner) view.findViewById(R.id.id_add_contact_type);
@@ -131,7 +146,7 @@ public class EditActivity extends BaseActivity {
             String name = contact.getDisplayName();
             mNameText.setText(name);
             if (!TextUtils.isEmpty(name)) {
-                mNameText.setSelection(name.length());
+                mNameText.setSelection(name.length());  // 光标
             }
             if (contact.getPhones() != null && contact.getPhones().size() > 0) {
                 for (ContactInfo info : contact.getPhones()) {

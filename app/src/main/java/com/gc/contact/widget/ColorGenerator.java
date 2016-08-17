@@ -54,10 +54,21 @@ public class ColorGenerator {
         mRandom = new Random(System.currentTimeMillis());
     }
 
+    /**
+     * 获取随机颜色
+     *
+     * @return 颜色
+     */
     public int getRandomColor() {
         return mColors.get(mRandom.nextInt(mColors.size()));
     }
 
+    /**
+     * 根据对象的哈希值获取颜色
+     *
+     * @param key 对象
+     * @return 颜色
+     */
     public int getColor(Object key) {
         return mColors.get(Math.abs(key.hashCode()) % mColors.size());
     }

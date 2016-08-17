@@ -99,7 +99,7 @@ public class DetailActivity extends BaseActivity {
                     type.setText(Phone.getTypeLabelResource(phone.getDescription()));
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v) {  // 拨打电话
                             Intent intent = new Intent(Intent.ACTION_DIAL);
                             Uri data = Uri.parse("tel:" + phone.getData());
                             intent.setData(data);
@@ -108,7 +108,7 @@ public class DetailActivity extends BaseActivity {
                     });
                     smsButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v) {  // 发送信息
                             Uri uri = Uri.parse("smsto:" + phone.getData());
                             Intent sendIntent = new Intent(Intent.ACTION_VIEW, uri);
                             sendIntent.putExtra("sms_body", "");
@@ -129,7 +129,7 @@ public class DetailActivity extends BaseActivity {
                     TextView data = (TextView) view.findViewById(R.id.id_contact_email);
                     TextView type = (TextView) view.findViewById(R.id.id_contact_email_type);
                     data.setText(email.getData());
-                    type.setText(Email.getTypeLabelResource(email.getDescription()));
+                    type.setText(Email.getTypeLabelResource(email.getDescription()));  // 根据标签获取类型名字
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -147,7 +147,7 @@ public class DetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mToolbar.setTitle(name);
+        mToolbar.setTitle(name);  // 标题设置为联系人姓名，此方法仅在onResume()中生效
     }
 
     /**

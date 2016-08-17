@@ -20,9 +20,9 @@ import com.google.zxing.WriterException;
 public class CodeCardActivity extends BaseActivity {
 
     private static final String TAG = CodeCardActivity.class.getSimpleName();
-    private LinearLayout mNameLayout;
-    private ImageView mQRCodeImage;
-    private static ColorGenerator colorGenerator;
+    private LinearLayout mNameLayout;  // 姓名布局
+    private ImageView mQRCodeImage;  // 二维码图像
+    private static ColorGenerator colorGenerator;  // 颜色生成器
 
     static {
         colorGenerator = ColorGenerator.MATERIAL;
@@ -32,7 +32,7 @@ public class CodeCardActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_qrcode_card);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.id_toolbar);
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);  // 设置标题栏
         if (mToolbar != null) {
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -49,21 +49,21 @@ public class CodeCardActivity extends BaseActivity {
     protected void fetchData() {
         Contact contact = null;
         if (getIntent().getExtras() != null) {
-            contact = (Contact) getIntent().getExtras().getSerializable("contact");
+            contact = (Contact) getIntent().getExtras().getSerializable("contact");  // 获取传递的联系人对象
         }
         if (contact != null) {
             String name = contact.getDisplayName();
             if (name != null && !name.isEmpty()) {
-                for (int i = 0; i < name.length(); i++) {
+                for (int i = 0; i < name.length(); i++) {  // 给每一个字构造一张图片
                     TextDrawable drawable = TextDrawable.builder()
                             .beginConfig()
-                            .textColor(Color.WHITE)
-                            .fontSize(48)
-                            .useFont(Typeface.DEFAULT)
-                            .width(120)
-                            .height(120)
+                            .textColor(Color.WHITE)  // 字体颜色
+                            .fontSize(48)  // 字体大小
+                            .useFont(Typeface.DEFAULT)  // 字体样式
+                            .width(120)  // 宽度
+                            .height(120)  // 高度
                             .endConfig()
-                            .buildRound(name.charAt(i) + "", colorGenerator.getColor(name));
+                            .buildRound(name.charAt(i) + "", colorGenerator.getRandomColor());
                     ImageView imageView = new ImageView(this);
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     imageView.setLayoutParams(new ViewGroup.LayoutParams(120, 120));
@@ -72,10 +72,9 @@ public class CodeCardActivity extends BaseActivity {
                     mNameLayout.addView(imageView);
                 }
             }
-            String config = contact.toString();
-            LogUtil.d(TAG, config);
+            String config = contact.toString();  // 二维码包含的信息
             try {
-                Bitmap qrBitmap = QRCodeUtil.createQRImage(config);
+                Bitmap qrBitmap = QRCodeUtil.createQRImage(config);  // 生成二维码
                 mQRCodeImage.setImageBitmap(qrBitmap);
             } catch (WriterException e) {
                 LogUtil.e(TAG, "generate qr_code WriterException:" + e.getMessage());

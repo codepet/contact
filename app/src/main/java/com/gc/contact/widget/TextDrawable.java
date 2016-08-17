@@ -6,6 +6,9 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 
+/**
+ * Copyright:<a herf="https://github.com/amulyakhare/TextDrawable">TextDrawable</a>
+ */
 public class TextDrawable extends ShapeDrawable {
 
     private final Paint textPaint;

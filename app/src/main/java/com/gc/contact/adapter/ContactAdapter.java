@@ -24,14 +24,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactH
     protected LayoutInflater inflater;
     protected OnRecyclerItemClickListener listener;
 
-    static {
-        colorGenerator = ColorGenerator.MATERIAL;
-    }
-
     public ContactAdapter(Context context, List<Contact> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
+        colorGenerator = ColorGenerator.MATERIAL;
     }
 
     @Override
@@ -44,16 +41,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactH
         String displayName = list.get(position).getDisplayName();
         TextDrawable drawable = TextDrawable.builder()
                 .beginConfig()
-                .textColor(Color.WHITE)
-                .fontSize(48)
-                .useFont(Typeface.DEFAULT)
-                .width(96)
-                .height(96)
+                .textColor(Color.WHITE)  // 字体颜色
+                .fontSize(48)  // 字体大小
+                .useFont(Typeface.DEFAULT)  // 字体样式
+                .width(96)  // 宽度
+                .height(96)  // 高度
                 .endConfig()
                 .buildRect(displayName.charAt(0) + "", colorGenerator.getColor(displayName));
         if (drawable != null) {
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            holder.name.setCompoundDrawables(drawable, null, null, null);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());  // 此属性必须设置，否则图片不显示
+            holder.name.setCompoundDrawables(drawable, null, null, null);  // 图片设置在左侧
         }
         holder.name.setText(displayName);
         if (listener != null) {

@@ -189,7 +189,7 @@ public class ContactModel {
                 }
             }
         } catch (Exception e) {
-            return 0;
+            return -1;
         }
         return rawContactId;
     }
