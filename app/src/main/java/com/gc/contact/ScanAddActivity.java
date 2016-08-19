@@ -66,6 +66,11 @@ public class ScanAddActivity extends BaseActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             contact = (Contact) getIntent().getExtras().getSerializable("contact");
             if (contact != null) {
+                for (int i = 0; i < contact.getPhones().size(); i++) {
+                    // 去除'-'和空格
+                    ContactInfo info = contact.getPhones().get(i);
+                    info.setData(info.getData().replace("-", "").trim());
+                }
                 setConfig(contact);
             }
         }

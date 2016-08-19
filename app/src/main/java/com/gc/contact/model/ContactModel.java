@@ -7,11 +7,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
 
 import com.gc.contact.entity.Contact;
@@ -22,14 +22,22 @@ import com.gc.contact.util.CharacterParser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 利用ContentResolver操作系统通讯录逻辑处理
+ * <ul>
+ * <li>获取所有联系人 {@link ContactModel#getPhoneContact(Context)}</li>
+ * <li>根据id获取联系人电话 {@link ContactModel#getPhones(Context, long)}</li>
+ * <li>根据id获取联系人邮件 {@link ContactModel#getEmails(Context, long)}</li>
+ * <li>添加联系人 {@link ContactModel#insert(Context, Contact)}</li>
+ * <li>修改联系人 {@link ContactModel#update(Context, Contact)}</li>
+ * <li>根据id删除联系人 {@link ContactModel#delete(Context, long)}</li>
+ * <ul/>
+ */
 public class ContactModel {
 
-    private static CharacterParser characterParser;
-
-    static {
-        characterParser = CharacterParser.getInstance();
-    }
-
+    /**
+     * 通过静态方法调用，因此不需要实例化
+     */
     private ContactModel() {
         throw new AssertionError();
     }
@@ -43,6 +51,7 @@ public class ContactModel {
     public static List<Contact> getPhoneContact(Context context) {
         List<Contact> contacts = new ArrayList<>();
         ContentResolver resolver = context.getContentResolver();
+        CharacterParser characterParser = CharacterParser.getInstance();
         Cursor cursor = resolver.query(
                 Phone.CONTENT_URI,
                 new String[]{Phone.CONTACT_ID, Phone.DISPLAY_NAME},
@@ -119,7 +128,7 @@ public class ContactModel {
         Cursor cursor = resolver.query(
                 Email.CONTENT_URI,
                 new String[]{Email.DATA, Email.TYPE},
-                Phone.CONTACT_ID + " = " + contactID,
+                Email.CONTACT_ID + " = " + contactID,
                 null,
                 null);
         if (cursor != null) {
@@ -154,39 +163,17 @@ public class ContactModel {
         try {
             ContentValues values = new ContentValues();
             ContentResolver resolver = context.getContentResolver();
-            Uri rawContactUri = resolver.insert(ContactsContract.RawContacts.CONTENT_URI, values);
+            Uri rawContactUri = resolver.insert(RawContacts.CONTENT_URI, values);
             rawContactId = ContentUris.parseId(rawContactUri);
             // 插入名字
-            if (!TextUtils.isEmpty(name)) {
-                values.clear();
-                values.put(Data.RAW_CONTACT_ID, rawContactId);
-                values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
-                values.put(StructuredName.GIVEN_NAME, name);
-                resolver.insert(Data.CONTENT_URI, values);
-            }
+            insertName(context, name, rawContactId);
             // 插入电话
             for (ContactInfo info : phones) {
-                String data = info.getData();
-                if (!TextUtils.isEmpty(data)) {
-                    values.clear();
-                    values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-                    values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-                    values.put(Phone.NUMBER, data);
-                    values.put(Phone.TYPE, info.getDescription());
-                    resolver.insert(Data.CONTENT_URI, values);
-                }
+                insertPhone(context, info, rawContactId);
             }
             // 插入电子邮件
             for (ContactInfo info : emails) {
-                String data = info.getData();
-                if (!TextUtils.isEmpty(data)) {
-                    values.clear();
-                    values.put(Data.RAW_CONTACT_ID, rawContactId);
-                    values.put(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
-                    values.put(Email.DATA, data);
-                    values.put(Email.TYPE, info.getDescription());
-                    resolver.insert(Data.CONTENT_URI, values);
-                }
+                insertEmail(context, info, rawContactId);
             }
         } catch (Exception e) {
             return -1;
@@ -195,28 +182,143 @@ public class ContactModel {
     }
 
     /**
+     * 插入姓名
+     *
+     * @param context      上下文
+     * @param name         姓名
+     * @param rawContactId 联系人id
+     */
+    private static void insertName(Context context, String name, long rawContactId) {
+        if (!TextUtils.isEmpty(name)) {
+            ContentValues values = new ContentValues();
+            ContentResolver resolver = context.getContentResolver();
+            values.clear();
+            values.put(Data.RAW_CONTACT_ID, rawContactId);
+            values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
+            values.put(StructuredName.GIVEN_NAME, name);
+            resolver.insert(Data.CONTENT_URI, values);
+        }
+    }
+
+    /**
+     * 插入电话
+     *
+     * @param context      上下文
+     * @param info         联系信息
+     * @param rawContactId 联系人id
+     */
+    private static void insertPhone(Context context, ContactInfo info, long rawContactId) {
+        String data = info.getData();
+        if (!TextUtils.isEmpty(data)) {
+            ContentValues values = new ContentValues();
+            values.clear();
+            values.put(Data.RAW_CONTACT_ID, rawContactId);
+            values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+            values.put(Phone.NUMBER, data);
+            values.put(Phone.TYPE, info.getDescription());
+            context.getContentResolver().insert(Data.CONTENT_URI, values);
+        }
+    }
+
+    /**
+     * 插入电话
+     *
+     * @param context      上下文
+     * @param info         联系信息
+     * @param rawContactId 联系人id
+     */
+    private static void insertEmail(Context context, ContactInfo info, long rawContactId) {
+        String data = info.getData();
+        if (!TextUtils.isEmpty(data)) {
+            ContentValues values = new ContentValues();
+            values.clear();
+            values.put(Data.RAW_CONTACT_ID, rawContactId);
+            values.put(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
+            values.put(Email.DATA, data);
+            values.put(Email.TYPE, info.getDescription());
+            context.getContentResolver().insert(Data.CONTENT_URI, values);
+        }
+    }
+
+    /**
      * 修改联系人
      *
      * @param context 上下文
      * @param contact 待修改联系人
-     * @return 修改结果，成功与否
      */
-    public static boolean update(Context context, Contact contact) {
-
-        return false;
+    public static void update(Context context, Contact contact) {
+        updateName(context, contact);  // 更新姓名
+        updatePhone(context, contact);  // 更新电话号码
+        updateEmail(context, contact);  // 更新邮箱
     }
 
     /**
-     * 根据id和姓名删除联系人
+     * 更新姓名
+     *
+     * @param context 上下文
+     * @param contact 联系人
+     */
+    private static void updateName(Context context, Contact contact) {
+        ContentValues values = new ContentValues();
+        values.clear();
+        values.put(Data.DISPLAY_NAME, contact.getDisplayName());
+        context.getContentResolver().update(
+                RawContacts.CONTENT_URI,
+                values,
+                RawContacts._ID + "=" + contact.getContactID(),
+                null);
+    }
+
+    /**
+     * 更新电话
+     *
+     * @param context 上下文
+     * @param contact 联系人
+     */
+    private static void updatePhone(Context context, Contact contact) {
+        for (ContactInfo info : contact.getPhones()) {
+            ContentValues values = new ContentValues();
+            values.clear();
+            values.put(Phone.NUMBER, info.getData());
+            values.put(Phone.TYPE, info.getDescription());
+            context.getContentResolver().update(
+                    Data.CONTENT_URI,
+                    values,
+                    Data.RAW_CONTACT_ID + "=? and " + Data.MIMETYPE + "=?",
+                    new String[]{contact.getContactID() + "", Phone.CONTENT_ITEM_TYPE});
+        }
+    }
+
+    /**
+     * 更新邮箱
+     *
+     * @param context 上下文
+     * @param contact 联系人
+     */
+    private static void updateEmail(Context context, Contact contact) {
+        for (ContactInfo info : contact.getEmails()) {
+            ContentValues values = new ContentValues();
+            values.clear();
+            values.clear();
+            values.put(Email.DATA, info.getData());
+            values.put(Email.TYPE, info.getDescription());
+            context.getContentResolver().update(
+                    Data.CONTENT_URI,
+                    values,
+                    Data.RAW_CONTACT_ID + "=? and " + Data.MIMETYPE + "=?",
+                    new String[]{contact.getContactID() + "", Email.CONTENT_ITEM_TYPE});
+        }
+    }
+
+    /**
+     * 根据id删除联系人
      *
      * @param context 上下文
      * @param id      联系人id
      */
     public static void delete(Context context, long id) {
-        Uri uri = Uri.parse("content://com.android.contacts/data");
         ContentResolver resolver = context.getContentResolver();
-        //根据id删除data中的相应数据
-        resolver.delete(uri, "raw_contact_id=?", new String[]{id + ""});
+        resolver.delete(Data.CONTENT_URI, Data.RAW_CONTACT_ID + "=" + id, null);
     }
 
 }

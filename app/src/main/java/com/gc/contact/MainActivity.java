@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -281,7 +282,7 @@ public class MainActivity extends BaseActivity {
             builder.sortLetter("#");
         }
         Contact delete_contact = new Contact(builder);
-        mContacts.remove(delete_contact);  // 添加至列表中
+        mContacts.remove(delete_contact);  // 从列表中移除
         mAdapter.notifyDataSetChanged();  // 通知更新界面
     }
 
@@ -291,7 +292,22 @@ public class MainActivity extends BaseActivity {
      * @param intent 数据
      */
     private void update(Intent intent) {
-
+        int position = intent.getIntExtra("position", 0);
+        String update_name = intent.getStringExtra("contact_name");
+        String update_pinyin = characterParser.getSelling(update_name);  // 设置姓名拼音
+        String update_sortString = update_pinyin.substring(0, 1).toUpperCase();  // 获取拼音首字母
+        Contact.Builder update_builder = new Contact.Builder()
+                .buildID(mContacts.get(position).getContactID())
+                .displayName(update_name);
+        // 正则表达式，判断首字母是否是英文字母
+        if (update_sortString.matches("[A-Z]")) {
+            update_builder.sortLetter(update_pinyin.toUpperCase());
+        } else {
+            update_builder.sortLetter("#");
+        }
+        mContacts.set(position, update_builder.build());
+        Collections.sort(mContacts, new Contact.Builder().build());
+        mAdapter.notifyDataSetChanged();
     }
 
 

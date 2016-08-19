@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.gc.contact.constant.AppConstant;
 import com.gc.contact.entity.Contact;
 import com.gc.contact.entity.ContactInfo;
 import com.gc.contact.model.ContactModel;
@@ -31,6 +32,8 @@ public class EditActivity extends BaseActivity {
     private List<Spinner> mEmailTypeList;  // 邮件类型列表
     private List<EditText> mEmailDataList;  // 邮件列表
     private LayoutInflater inflater;  // 布局填充器
+    private Contact contact;
+    private String oldName;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class EditActivity extends BaseActivity {
 
     /**
      * 添加电话布局，并填充数据
+     *
      * @param info 联系方式信息
      */
     private void addPhoneView(ContactInfo info) {
@@ -122,6 +126,7 @@ public class EditActivity extends BaseActivity {
 
     /**
      * 添加邮件布局，并填充信息
+     *
      * @param info 联系方式信息
      */
     private void addEmailView(ContactInfo info) {
@@ -141,27 +146,39 @@ public class EditActivity extends BaseActivity {
         mPhoneDataList = new ArrayList<>();
         mEmailTypeList = new ArrayList<>();
         mEmailDataList = new ArrayList<>();
-        Contact contact = (Contact) getIntent().getExtras().getSerializable("contact");
+        contact = (Contact) getIntent().getExtras().getSerializable("contact");
         if (contact != null) {
-            String name = contact.getDisplayName();
-            mNameText.setText(name);
-            if (!TextUtils.isEmpty(name)) {
-                mNameText.setSelection(name.length());  // 光标
+            fetchName();
+            fetchPhones();
+            fetchEmails();
+        }
+    }
+
+    private void fetchName() {
+        oldName = contact.getDisplayName();
+        mNameText.setText(oldName);
+        if (!TextUtils.isEmpty(oldName)) {
+            mNameText.setSelection(oldName.length());  // 光标
+        }
+    }
+
+    private void fetchPhones() {
+        if (contact.getPhones() != null && contact.getPhones().size() > 0) {
+            for (ContactInfo info : contact.getPhones()) {
+                addPhoneView(info);
             }
-            if (contact.getPhones() != null && contact.getPhones().size() > 0) {
-                for (ContactInfo info : contact.getPhones()) {
-                    addPhoneView(info);
-                }
-            } else {
-                addPhoneView();
+        } else {
+            addPhoneView();
+        }
+    }
+
+    private void fetchEmails() {
+        if (contact.getEmails() != null && contact.getEmails().size() > 0) {
+            for (ContactInfo info : contact.getEmails()) {
+                addEmailView(info);
             }
-            if (contact.getEmails() != null && contact.getEmails().size() > 0) {
-                for (ContactInfo info : contact.getEmails()) {
-                    addEmailView(info);
-                }
-            } else {
-                addEmailView();
-            }
+        } else {
+            addEmailView();
         }
     }
 
@@ -171,6 +188,20 @@ public class EditActivity extends BaseActivity {
             ToastUtil.show(this, getString(R.string.name_null_tips));
             return;
         }
+        List<ContactInfo> phones = generatePhones();
+        List<ContactInfo> emails = generateEmails();
+        Contact.Builder builder = new Contact.Builder();
+        builder.buildID(contact.getContactID()).displayName(name).phones(phones).emails(emails);
+        Contact newContact = builder.build();
+        String type = getIntent().getExtras().getString("type");
+        if (type != null && type.equals("edit")) {
+            ContactModel.update(this, newContact);
+        }
+        notifyUpdate(newContact);
+        back(newContact);
+    }
+
+    private List<ContactInfo> generatePhones() {
         List<ContactInfo> phones = new ArrayList<>();
         for (int i = 0; i < mPhoneDataList.size(); i++) {
             String data = mPhoneDataList.get(i).getText().toString().trim();
@@ -184,6 +215,10 @@ public class EditActivity extends BaseActivity {
                     .build();
             phones.add(info);
         }
+        return phones;
+    }
+
+    private List<ContactInfo> generateEmails() {
         List<ContactInfo> emails = new ArrayList<>();
         for (int i = 0; i < mEmailDataList.size(); i++) {
             String data = mEmailDataList.get(i).getText().toString().trim();
@@ -197,13 +232,18 @@ public class EditActivity extends BaseActivity {
                     .build();
             emails.add(info);
         }
-        Contact.Builder builder = new Contact.Builder();
-        builder.displayName(name).phones(phones).emails(emails);
-        Contact contact = builder.build();
-        String type = getIntent().getExtras().getString("type");
-        if (type != null && type.equals("edit")) {
-            ContactModel.update(this, contact);
-        }
+        return emails;
+    }
+
+    private void notifyUpdate(Contact contact) {
+        Intent intent = new Intent();
+        intent.putExtra("position", getIntent().getExtras().getInt("position", 0));
+        intent.putExtra("contact_name", contact.getDisplayName());
+        intent.setAction(AppConstant.UPDATE_ACTION);  // 设置更新动作
+        sendBroadcast(intent);
+    }
+
+    private void back(Contact contact) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("contact", contact);

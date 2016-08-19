@@ -9,11 +9,11 @@ import java.util.List;
 public class Contact implements Serializable, Comparator<Contact> {
 
     public static final long serialVersionUID = 3113005995L;
-    private final long contactID;  // 联系人ID
-    private final String displayName;  // 联系人姓名
-    private final String sortLetter;  // 联系人姓名拼音
-    private final List<ContactInfo> phones; // 联系人电话列表
-    private final List<ContactInfo> emails; // 联系人邮件列表
+    private long contactID;  // 联系人ID
+    private String displayName;  // 联系人姓名
+    private String sortLetter;  // 联系人姓名拼音
+    private List<ContactInfo> phones; // 联系人电话列表
+    private List<ContactInfo> emails; // 联系人邮件列表
 
     public Contact(Builder builder) {
         contactID = builder.contactID;
@@ -41,6 +41,26 @@ public class Contact implements Serializable, Comparator<Contact> {
 
     public List<ContactInfo> getEmails() {
         return emails;
+    }
+
+    public void setEmails(List<ContactInfo> emails) {
+        this.emails = emails;
+    }
+
+    public void setPhones(List<ContactInfo> phones) {
+        this.phones = phones;
+    }
+
+    public void setSortLetter(String sortLetter) {
+        this.sortLetter = sortLetter;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setContactID(long contactID) {
+        this.contactID = contactID;
     }
 
     @Override

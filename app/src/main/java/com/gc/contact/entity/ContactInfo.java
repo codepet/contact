@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class ContactInfo implements Serializable {
 
-    private final String data;  // 具体值
-    private final String type;  // 类型（电话Phone / 邮件Email）
-    private final int description;  // 描述（0...n）
+    private String data;  // 具体值
+    private String type;  // 类型（电话Phone / 邮件Email）
+    private int description;  // 描述（0...n）
 
     public ContactInfo(Builder builder) {
         this.data = builder.data;
@@ -24,6 +24,18 @@ public class ContactInfo implements Serializable {
 
     public int getDescription() {
         return description;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDescription(int description) {
+        this.description = description;
     }
 
     public static class Builder {
