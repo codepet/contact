@@ -11,7 +11,6 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +42,6 @@ public class DetailActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_detail);
         mToolbar = (Toolbar) findViewById(R.id.id_toolbar);
-        setSupportActionBar(mToolbar);
         if (mToolbar != null) {
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,12 +97,11 @@ public class DetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mToolbar.setTitle(name);  // 标题设置为联系人姓名，此方法仅在onResume()中生效
-        Log.d("activity", "onResume");
+        setSupportActionBar(mToolbar);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("activity", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200 && resultCode == RESULT_OK) {
             if (data != null && data.getExtras() != null) {
@@ -119,36 +116,15 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 根据联系人信息设置界面信息
+     */
     private void setConfig() {
         // 电话号码布局
         mPhonesLayout.removeAllViews();
-        if (mPhones.size() > 0) {
-            for (final ContactInfo phone : mPhones) {
-                View view = inflater.inflate(R.layout.item_phone, new RelativeLayout(this), false);
-                TextView data = (TextView) view.findViewById(R.id.id_contact_phone);
-                TextView type = (TextView) view.findViewById(R.id.id_contact_phone_type);
-                ImageButton smsButton = (ImageButton) view.findViewById(R.id.id_contact_sms);
-                data.setText(phone.getData());
-                type.setText(Phone.getTypeLabelResource(phone.getDescription()));
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {  // 拨打电话
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        Uri data = Uri.parse("tel:" + phone.getData());
-                        intent.setData(data);
-                        startActivity(intent);
-                    }
-                });
-                smsButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {  // 发送信息
-                        Uri uri = Uri.parse("smsto:" + phone.getData());
-                        Intent sendIntent = new Intent(Intent.ACTION_VIEW, uri);
-                        sendIntent.putExtra("sms_body", "");
-                        startActivity(sendIntent);
-                    }
-                });
-                mPhonesLayout.addView(view);
+        if (mPhones != null && mPhones.size() > 0) {
+            for (ContactInfo phone : mPhones) {
+                addPhoneVew(phone);
             }
         } else {
             View emptyPhone = inflater.inflate(R.layout.empty_view, new LinearLayout(this), false);  // 数据为空时显示的布局
@@ -156,19 +132,9 @@ public class DetailActivity extends BaseActivity {
         }
         // 电子邮件
         mEmailsLayout.removeAllViews();
-        if (mEmails.size() > 0) {
-            for (final ContactInfo email : mEmails) {
-                View view = inflater.inflate(R.layout.item_email, new RelativeLayout(this), false);
-                TextView data = (TextView) view.findViewById(R.id.id_contact_email);
-                TextView type = (TextView) view.findViewById(R.id.id_contact_email_type);
-                data.setText(email.getData());
-                type.setText(Email.getTypeLabelResource(email.getDescription()));  // 根据标签获取类型名字
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                mEmailsLayout.addView(view);
+        if (mEmails != null && mEmails.size() > 0) {
+            for (ContactInfo email : mEmails) {
+                addEmailView(email);
             }
         } else {
             View emptyEmail = inflater.inflate(R.layout.empty_view, new LinearLayout(this), false);  // 数据为空时显示的布局
@@ -176,6 +142,57 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 添加电话布局
+     *
+     * @param phone 添加的电话信息
+     */
+    private void addPhoneVew(final ContactInfo phone) {
+        View view = inflater.inflate(R.layout.item_phone, new RelativeLayout(this), false);
+        TextView data = (TextView) view.findViewById(R.id.id_contact_phone);
+        TextView type = (TextView) view.findViewById(R.id.id_contact_phone_type);
+        ImageButton smsButton = (ImageButton) view.findViewById(R.id.id_contact_sms);
+        data.setText(phone.getData());
+        type.setText(Phone.getTypeLabelResource(phone.getDescription()));
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {  // 拨打电话
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + phone.getData());
+                intent.setData(data);
+                startActivity(intent);
+            }
+        });
+        smsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {  // 发送信息
+                Uri uri = Uri.parse("smsto:" + phone.getData());
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW, uri);
+                sendIntent.putExtra("sms_body", "");
+                startActivity(sendIntent);
+            }
+        });
+        mPhonesLayout.addView(view);
+    }
+
+    /**
+     * 添加邮箱布局
+     *
+     * @param email 添加的邮箱信息
+     */
+    private void addEmailView(final ContactInfo email) {
+        View view = inflater.inflate(R.layout.item_email, new RelativeLayout(this), false);
+        TextView data = (TextView) view.findViewById(R.id.id_contact_email);
+        TextView type = (TextView) view.findViewById(R.id.id_contact_email_type);
+        data.setText(email.getData());
+        type.setText(Email.getTypeLabelResource(email.getDescription()));  // 根据标签获取类型名字
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mEmailsLayout.addView(view);
+    }
 
     /**
      * 跳转至二维码名片界面
